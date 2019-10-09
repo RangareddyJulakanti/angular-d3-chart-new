@@ -1,7 +1,8 @@
 import { Component, ElementRef, Input, OnChanges, ViewChild, ViewEncapsulation, HostListener } from '@angular/core';
 import * as d3 from 'd3';
 import { DataModel } from 'src/app/data/data.model';
-
+import * as jsPDF from 'jspdf';
+import * as html2canvas from 'html2canvas';
 @Component({
   selector: 'app-bar-chart',
   encapsulation: ViewEncapsulation.None,
@@ -11,6 +12,8 @@ import { DataModel } from 'src/app/data/data.model';
 export class BarChartComponent implements OnChanges {
   @ViewChild('chart')
   private chartContainer: ElementRef;
+  @ViewChild('canvas') canvas: ElementRef;
+  @ViewChild('downloadLink') downloadLink: ElementRef;
 
   @Input()
   data: DataModel[];
@@ -80,4 +83,14 @@ export class BarChartComponent implements OnChanges {
         .attr('width', x.bandwidth())
         .attr('height', d => contentHeight - y(d.frequency));
   }
+  downloadImage() {
+   const doc = new jsPDF();
+ //  return ' ';
+  html2canvas(this.chartContainer.nativeElement).then(canvas => {
+    this.canvas.nativeElement.src = canvas.toDataURL();
+    this.downloadLink.nativeElement.href = canvas.toDataURL('image/png');
+    this.downloadLink.nativeElement.download = 'marble-diagram.png';
+    this.downloadLink.nativeElement.click();
+  });
+ }
 }

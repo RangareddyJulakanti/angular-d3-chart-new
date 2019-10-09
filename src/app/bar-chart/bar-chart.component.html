@@ -1,1 +1,6 @@
 <div #chart id="chart" (window:resize)="onResize($event)"></div>
+<div id="download">
+    <img #canvas>
+    <a #downloadLink></a>
+</div>
+<div class="btn btn-primary" (click)="downloadImage()">DL</div>
